@@ -1,7 +1,7 @@
-import React from 'react'
 import { AppProps } from 'next/app'
+import React from 'react'
 import { ThemeProvider } from 'styled-components'
-
+import { wrapper } from '../redux/store'
 import GlobalStyle from '../styles/global'
 import theme from '../styles/theme'
 
@@ -14,4 +14,4 @@ const MyApp: React.FC<AppProps> = ({ Component, pageProps }) => {
   )
 }
 
-export default MyApp
+export default wrapper.withRedux(MyApp)
