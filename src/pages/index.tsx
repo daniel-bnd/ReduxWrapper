@@ -1,15 +1,59 @@
 import axios from 'axios'
 import Head from 'next/head'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { wrapper } from '../redux/store'
-import { selectProfile, setProfileData } from '../redux/store/slices/profile'
+import {
+  openDeletePostModal,
+  selectDeletePostModal
+} from '../redux/store/slices/deletePostModal'
+import {
+  openEditPostModal,
+  selectEditPostModal
+} from '../redux/store/slices/editPostModal'
+import { loginSuccess, selectLogin } from '../redux/store/slices/login'
+import {
+  addPost,
+  editPost,
+  selectPosts,
+  setPostsData
+} from '../redux/store/slices/posts'
 import { Container } from '../styles/pages/Home'
 
 const Home: React.FC = () => {
-  const { profile } = useSelector(selectProfile).profile
+  const { posts } = useSelector(selectPosts).posts
+  const { login } = useSelector(selectLogin).login
+  const { deletePostModal } = useSelector(selectDeletePostModal).deletePostModal
+  const { editPostModal } = useSelector(selectEditPostModal).editPostModal
   const dispatch = useDispatch()
-  console.log(profile.map(p => p.title))
+  console.log()
+
+  useEffect(() => {
+    dispatch(openDeletePostModal(5)),
+      dispatch(
+        loginSuccess({
+          username: 'Daniel',
+          email: 'daniielreis@live.com'
+        })
+      ),
+      dispatch(
+        openEditPostModal({
+          id: 56,
+          title: 'Sexo',
+          content: 'Sem parar'
+        })
+      )
+    dispatch(
+      addPost({
+        id: 21,
+        username: 'Sexo',
+        created_at: new Date().toISOString(),
+        title: 'Sexo sem parar',
+        content: 'puta merda'
+      })
+    ),
+      dispatch(editPost({ id: 1740, title: 'PUTA VADIA', content: 'GALINHA' }))
+  }, [])
 
   return (
     <Container>
@@ -19,8 +63,49 @@ const Home: React.FC = () => {
 
       <h1>ReactJS Structure</h1>
       <p>Hello World!</p>
-      {profile.map(p => (
-        <div key={p.id}>{p.title}</div>
+      <br />
+
+      <button
+        onClick={() => {
+          dispatch(openDeletePostModal(5)),
+            dispatch(
+              loginSuccess({
+                username: 'Daniel',
+                email: 'daniielreis@live.com'
+              })
+            ),
+            dispatch(
+              openEditPostModal({
+                id: 56,
+                title: 'Sexo',
+                content: 'Sem parar'
+              })
+            )
+          dispatch(
+            addPost({
+              id: 21,
+              username: 'Sexo',
+              created_at: new Date().toISOString(),
+              title: 'Sexo sem parar',
+              content: 'puta merda'
+            })
+          ),
+            dispatch(
+              editPost({ id: 1740, title: 'PUTA VADIA', content: 'GALINHA' })
+            )
+        }}
+      >
+        XERECA
+      </button>
+      <p>login: {login.isAuth ? 'true' : 'false'}</p>
+      <p>user: {login.user.username}</p>
+      <p>email: {login.user.email}</p>
+      <p>modal id: {deletePostModal.id}</p>
+      <p>modal edit: {editPostModal.title}</p>
+      {posts.map(p => (
+        <div key={p.id}>
+          {p.title} {p.id}
+        </div>
       ))}
     </Container>
   )
@@ -31,8 +116,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     await axios
       .get('http://localhost:3000/api/getAllPosts')
       .then(res => {
-        console.log(store.dispatch)
-        store.dispatch(setProfileData(res.data))
+        store.dispatch(setPostsData(res.data))
       })
       .catch(console.log)
 

@@ -1,11 +1,19 @@
 import { configureStore, ThunkAction } from '@reduxjs/toolkit'
 import { createWrapper } from 'next-redux-wrapper'
 import { Action } from 'redux'
-import profileReducer from './slices/profile'
+import deletePostModalReducer from './slices/deletePostModal'
+import editPostModalReducer from './slices/editPostModal'
+import loginReducer from './slices/login'
+import postsReducer from './slices/posts'
 
 const makeStore = () =>
   configureStore({
-    reducer: { profile: profileReducer },
+    reducer: {
+      posts: postsReducer,
+      login: loginReducer,
+      deletePostModal: deletePostModalReducer,
+      editPostModal: editPostModalReducer
+    },
     devTools: true
   })
 
