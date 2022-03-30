@@ -7,9 +7,9 @@ import { selectProfile, setProfileData } from '../redux/store/slices/profile'
 import { Container } from '../styles/pages/Home'
 
 const Home: React.FC = () => {
-  const { profile } = useSelector(selectProfile)
+  const { profile } = useSelector(selectProfile).profile
   const dispatch = useDispatch()
-  // console.log(profile.map(p => p.title))
+  console.log(profile.map(p => p.title))
 
   return (
     <Container>
@@ -19,7 +19,9 @@ const Home: React.FC = () => {
 
       <h1>ReactJS Structure</h1>
       <p>Hello World!</p>
-      {profile.map(p => p.title)}
+      {profile.map(p => (
+        <div key={p.id}>{p.title}</div>
+      ))}
     </Container>
   )
 }
@@ -29,6 +31,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     await axios
       .get('http://localhost:3000/api/getAllPosts')
       .then(res => {
+        console.log(store.dispatch)
         store.dispatch(setProfileData(res.data))
       })
       .catch(console.log)

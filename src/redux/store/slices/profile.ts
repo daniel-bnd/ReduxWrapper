@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { HYDRATE } from 'next-redux-wrapper'
 import { AppState } from '..'
 
-interface Props {
+export type Props = {
   id: number
   username: string
   created_datetime: string
@@ -36,6 +36,6 @@ export const ProfileSlice = createSlice({
 
 export const { setProfileData } = ProfileSlice.actions
 
-export const selectProfile = (state: AppState) => state.profile
+export const selectProfile = (state: AppState) => state
 
 export default ProfileSlice.reducer
