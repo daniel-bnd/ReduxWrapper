@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { HYDRATE } from 'next-redux-wrapper'
 import { AppState } from '..'
 
 interface User {
@@ -6,7 +7,7 @@ interface User {
   email: string
 }
 
-interface Props {
+export interface LoginProps {
   isLoading: boolean
   isAuth: boolean
   error: string
@@ -14,7 +15,7 @@ interface Props {
 }
 
 interface InitialStateProps {
-  login: Props
+  login: LoginProps
 }
 
 const initialState: InitialStateProps = {
@@ -54,12 +55,12 @@ export const LoginSlice = createSlice({
     }
   },
   extraReducers: {
-    /* [HYDRATE]: (state, { payload }) => {
+    [HYDRATE]: (state, { payload }) => {
       if (!payload.login) {
         return state
       }
-      return state
-    } */
+      state = payload
+    }
   }
 })
 

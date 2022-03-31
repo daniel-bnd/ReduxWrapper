@@ -43,7 +43,7 @@ export const PostsSlice = createSlice({
       if (!payload.posts) {
         return state
       }
-      return payload
+      return (state = payload)
     }
   }
 })

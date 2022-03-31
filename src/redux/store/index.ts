@@ -1,6 +1,7 @@
 import { configureStore, ThunkAction } from '@reduxjs/toolkit'
 import { createWrapper } from 'next-redux-wrapper'
 import { Action } from 'redux'
+import cookiesReducer from './slices/cookies'
 import deletePostModalReducer from './slices/deletePostModal'
 import editPostModalReducer from './slices/editPostModal'
 import loginReducer from './slices/login'
@@ -11,6 +12,7 @@ const makeStore = () =>
     reducer: {
       posts: postsReducer,
       login: loginReducer,
+      cookies: cookiesReducer,
       deletePostModal: deletePostModalReducer,
       editPostModal: editPostModalReducer
     },

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import Head from 'next/head'
-import React, { useEffect } from 'react'
+import Link from 'next/link'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { wrapper } from '../redux/store'
 import {
@@ -20,40 +21,30 @@ import {
 } from '../redux/store/slices/posts'
 import { Container } from '../styles/pages/Home'
 
-const Home: React.FC = () => {
+const Home: React.FC = (props: any) => {
   const { posts } = useSelector(selectPosts).posts
   const { login } = useSelector(selectLogin).login
   const { deletePostModal } = useSelector(selectDeletePostModal).deletePostModal
   const { editPostModal } = useSelector(selectEditPostModal).editPostModal
   const dispatch = useDispatch()
-  console.log()
+  //console.log(props.login.isAuth)
 
-  useEffect(() => {
-    dispatch(openDeletePostModal(5)),
-      dispatch(
-        loginSuccess({
-          username: 'Daniel',
-          email: 'daniielreis@live.com'
-        })
-      ),
-      dispatch(
-        openEditPostModal({
-          id: 56,
-          title: 'Sexo',
-          content: 'Sem parar'
-        })
-      )
-    dispatch(
-      addPost({
-        id: 21,
-        username: 'Sexo',
-        created_at: new Date().toISOString(),
-        title: 'Sexo sem parar',
-        content: 'puta merda'
+  async function handleLogin() {
+    await axios
+      .post('http://localhost:3000/api/signInRequest', {
+        username: 'Daniel',
+        email: 'daniielreis@live.com'
       })
-    ),
-      dispatch(editPost({ id: 1740, title: 'PUTA VADIA', content: 'GALINHA' }))
-  }, [])
+      .then(res => {
+        dispatch(
+          loginSuccess({
+            username: 'Daniel',
+            email: 'daniielreis@live.com'
+          })
+        )
+      })
+      .catch(console.log)
+  }
 
   return (
     <Container>
@@ -61,41 +52,40 @@ const Home: React.FC = () => {
         <title>Homepage</title>
       </Head>
 
+      <Link href="/cookies">Cookies</Link>
+
       <h1>ReactJS Structure</h1>
       <p>Hello World!</p>
+      <br />
+
+      <button onClick={() => handleLogin()}>Login</button>
       <br />
 
       <button
         onClick={() => {
           dispatch(openDeletePostModal(5)),
             dispatch(
-              loginSuccess({
-                username: 'Daniel',
-                email: 'daniielreis@live.com'
+              openEditPostModal({
+                id: 56,
+                title: 'Conteúdo editado',
+                content: 'Teste'
               })
             ),
             dispatch(
-              openEditPostModal({
-                id: 56,
-                title: 'Sexo',
-                content: 'Sem parar'
+              addPost({
+                id: 21,
+                username: 'user',
+                created_at: new Date().toISOString(),
+                title: 'User',
+                content: "I'm a user"
               })
-            )
-          dispatch(
-            addPost({
-              id: 21,
-              username: 'Sexo',
-              created_at: new Date().toISOString(),
-              title: 'Sexo sem parar',
-              content: 'puta merda'
-            })
-          ),
+            ),
             dispatch(
               editPost({ id: 1740, title: 'PUTA VADIA', content: 'GALINHA' })
             )
         }}
       >
-        XERECA
+        CONFIGS
       </button>
       <p>login: {login.isAuth ? 'true' : 'false'}</p>
       <p>user: {login.user.username}</p>
