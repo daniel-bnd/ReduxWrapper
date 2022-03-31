@@ -55,8 +55,16 @@ const Cookies: React.FC = (props: any) => {
 export const getServerSideProps = wrapper.getServerSideProps(
   store => async ctx => {
     const { ['codeleap']: token } = parseCookies(ctx)
+
+    let isAuth
+
+    if (!token) {
+      isAuth = false
+    }
+
     let username
     let email
+
     if (token) {
       await axios({
         method: 'GET',
@@ -67,6 +75,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
           const dados: any = res.data
           username = dados.username
           email = dados.email
+          isAuth = true
           store.dispatch(
             loginSuccess({
               username,
@@ -75,22 +84,22 @@ export const getServerSideProps = wrapper.getServerSideProps(
           )
         })
         .catch(err => {
-          console.log(err)
+          isAuth = false
         })
     }
 
-    if (!token) {
+    if (isAuth) {
+      return {
+        props: {
+          login: store.getState().login.login
+        }
+      }
+    } else {
       return {
         redirect: {
           destination: '/',
           permanent: false
         }
-      }
-    }
-
-    return {
-      props: {
-        login: store.getState().login.login
       }
     }
   }
